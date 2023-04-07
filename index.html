@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronic Music Touch Screen</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style type="text/css">
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .player {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .player-top {
+            background-color: #f0f0f0;
+        }
+
+        .player-bottom {
+            background-color: #e0e0e0;
+        }
+
+        .sound-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            padding: 15px 32px;
+        }
+
+        .volume-slider {
+            width: 100%;
+            margin: 10px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function playSound(audioContext, gainNode) {
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 440;
+            oscillator.connect(gainNode);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 1);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioContext = new AudioContext();
+            const gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+
+            const soundBtns = document.querySelectorAll('.sound-btn');
+            soundBtns.forEach(soundBtn => {
+                soundBtn.addEventListener('click', function() {
+                    playSound(audioContext, gainNode);
+                });
+            });
+
+            const volumeSliders = document.querySelectorAll('.volume-slider');
+            volumeSliders.forEach(volumeSlider => {
+                volumeSlider.addEventListener('input', function(event) {
+                    gainNode.gain.value = event.target.value;
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="player player-top">
+        <!-- Add controls for player 1 here -->
+        <button class="sound-btn">Sound 1</button>
+        <input type="range" class="volume-slider">
+    </div>
+
+    <div class="player player-bottom">
+        <!-- Add controls for player 2 here -->
+        <button class="sound-btn">Sound 2</button>
+        <input type="range" class="volume-slider">
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
